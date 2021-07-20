@@ -1,0 +1,37 @@
+class Solution {
+private:
+    const string letterMap[10] = {
+        "", // 0
+        "", // 1
+        "abc", // 2
+        "def", // 3
+        "ghi", // 4
+        "jkl", // 5
+        "mno", // 6
+        "pqrs", // 7
+        "tuv", // 8
+        "wxyz", // 9
+    };
+
+public:
+    vector<string> res;
+    string path;   
+    void backtrace(string digits, int index){
+        if(path.size() == digits.size()){
+            res.emplace_back(path);
+            return;
+        }
+        int digit = digits[index]-'0';
+        for(int i = 0; i < letterMap[digit].size(); i++){           
+            path += letterMap[digit][i];
+            backtrace(digits, index + 1);
+            path.pop_back();
+        }
+    }
+    vector<string> letterCombinations(string digits) {      
+        if(digits.size() == 0)
+            return res;
+        backtrace(digits, 0);
+        return res;
+    }
+};

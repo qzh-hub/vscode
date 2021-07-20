@@ -1,0 +1,48 @@
+class Solution {
+public:
+    vector<string> res;
+    bool isvalid(string s, int start, int end){
+        if(start > end)
+            return false;
+        if(s[start] == '0' && end > start){
+            return false;
+        }
+        int num = 0;
+        for(int i = start; i <= end; i ++){
+            if(s[i] < '0' || s[i] > '9')
+                return false;
+            num = num * 10 + (s[i] - '0');
+            if(num > 255)
+                return false;
+        }
+        return true;
+    }
+
+    void backtrace(string s, int startIndex, int pointNum){
+        if(pointNum == 3){
+            if(isvalid(s, startIndex, s.size()-1)){
+                res.emplace_back(s);
+                return;
+            }                
+        }
+        for(int i = startIndex; i < s.size(); i ++){
+            if(isvalid(s, startIndex, i)){
+                pointNum ++;
+                s.insert(s.begin() + i + 1, '.');
+                // 因为插入了'.'，所以从 i+2 开始
+                backtrace(s, i + 2, pointNum);
+                s.erase(s.begin() + i + 1);
+                pointNum --;
+            }else{
+                break;
+            }         
+        }
+    }
+    vector<string> restoreIpAddresses(string s) {
+        if(s.size() > 12)
+            return res;
+        int pointNum = 0;
+        backtrace(s, 0, 0);
+        return res;
+    }
+};

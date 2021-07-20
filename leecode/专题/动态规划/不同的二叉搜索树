@@ -1,0 +1,25 @@
+class Solution {
+public:
+    // 一个节点下只有一种树
+    // 两个节点有两种树
+    // 三个节点可以是 
+    // 1、左右各有一个节点（一种情况）
+    // 2、左边有一个两节点构成的子树（两种情况）
+    // 3、右边有一个两节点构成的右子树（两种情况）
+    int numTrees(int n) {
+        vector<int> dp(n + 1, 0);
+        if(n == 1)
+            return 1;
+        if(n == 2)
+            return 2;
+        dp[0] = 1;
+        dp[1] = 1;
+        dp[2] = 2;
+        for(int i = 3; i <= n; i ++){
+            for(int j = 0; j < i; j ++){
+                dp[i] += dp[j] * dp[i - j - 1];
+            }           
+        }
+        return dp[n];
+    }
+};

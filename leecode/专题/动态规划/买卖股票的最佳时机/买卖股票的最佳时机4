@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int maxProfit(int k, vector<int>& prices) {
+        int len = prices.size();
+        if(len < 2)
+            return 0;
+        vector<vector<int>> dp(len, vector<int>(k * 2 + 1, 0));
+        for(int i = 1; i < dp[0].size(); i += 2)
+            dp[0][i] = -prices[0];
+        for(int i = 1; i < len; i ++){
+            for(int j = 1; j < k * 2 + 1; j ++){
+                if(j % 2 == 1)
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1] - prices[i]);
+                else
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1] + prices[i]);
+            }               
+        }
+        return dp[len - 1][k * 2];
+    }
+};

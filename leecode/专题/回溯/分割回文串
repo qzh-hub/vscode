@@ -1,0 +1,36 @@
+class Solution {
+public:
+
+    vector<vector<string>> res;
+    vector<string> path;
+
+    bool isPalindrome(string s, int left, int right){
+        while(left < right){
+            if(s[left] != s[right])
+                return false;
+            left ++;
+            right --;
+        }
+        return true;
+    }
+
+    void backtrace(string s, int startIndex){
+        if(startIndex == s.size()){
+            res.emplace_back(path);
+            return;
+        }
+        for(int i = startIndex; i < s.size(); i ++){
+            if(isPalindrome(s, startIndex, i))
+                path.emplace_back(s.substr(startIndex, i-startIndex+1));              
+            else
+                continue;
+            backtrace(s, i+1);
+            path.pop_back();
+        }
+    }
+
+    vector<vector<string>> partition(string s) {
+        backtrace(s, 0);
+        return res;
+    }
+};

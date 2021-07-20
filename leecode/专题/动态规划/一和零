@@ -1,0 +1,27 @@
+class Solution {
+public:
+    // dp[i][j] i个0，j个1的最大子集数
+    pair<int, int> count(string s){
+        int num0 = 0, num1 = 0;
+        for(int i = 0; i < s.size(); i ++){
+            if(s[i] == '0')
+                num0 ++;
+            else
+                num1 ++;
+        }
+        return {num0, num1};
+    }
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+        for(int k = 0; k < strs.size(); k ++){
+            int count0 = count(strs[k]).first;
+            int count1 = count(strs[k]).second;
+            for(int i = m; i >= count0; i --){
+                for(int j = n; j >= count1; j --){
+                    dp[i][j] = max(dp[i][j], dp[i - count0][j - count1] + 1);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+};

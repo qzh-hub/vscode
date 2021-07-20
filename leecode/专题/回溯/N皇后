@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<vector<string>> res;
+    bool isvalid(int n, int row, int col, vector<string>& checkerboard){
+        // 判断该皇后所在列是否存在其他皇后，行不用判断，因为回溯中一行放置后会进入下一行
+        for(int i = 0; i < row; i ++){
+            if(checkerboard[i][col] == 'Q')
+                return false;
+        }
+        // 判断两条对角线上是否存在其他皇后
+        for(int i = row - 1, j = col - 1; i >=0 && j >= 0; i --, j --){
+            if(checkerboard[i][j] == 'Q')
+                return false;
+        }   
+        for(int i = row - 1, j = col + 1; i >=0 && j < n; i --, j ++){
+            if(checkerboard[i][j] == 'Q')
+                return false;
+        }  
+        return true;
+    }
+    void backtrace(int startRow, int n, vector<string>& checkerboard){
+        if(startRow == n){
+            res.emplace_back(checkerboard);
+            return;
+        }
+        for(int i = 0; i < n; i ++){
+            if(isvalid(n, startRow, i, checkerboard)){
+                checkerboard[startRow][i] = 'Q';
+                backtrace(startRow + 1, n, checkerboard);
+                checkerboard[startRow][i] = '.';
+            }
+        }
+    }
+    vector<vector<string>> solveNQueens(int n) { 
+        vector<string> checkerboard;      
+        for(int i = 0; i < n; i ++){
+            string str;
+            for(int j = 0; j < n; j ++)
+                str.push_back('.');           
+            checkerboard.push_back(str);
+        }
+        backtrace(0, n, checkerboard);
+        return res;
+    }
+};
