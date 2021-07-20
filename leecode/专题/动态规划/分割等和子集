@@ -1,0 +1,20 @@
+class Solution {
+public:
+    // sum/2是背包容量，找到一组数使得这些数的和为sum/2，物品即数组元素的价值和重量相等，
+    // 若能找到背包的最大价值，背包正好可以被装满
+    bool canPartition(vector<int>& nums) {
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        if(sum % 2 != 0)
+            return false;
+        sum = sum / 2;
+        vector<int> dp(10001, 0);
+        for(int i = 0; i < nums.size(); i ++){
+            for(int j = sum; j >= nums[i]; j --){
+                dp[j] = max(dp[j], dp[j - nums[i]] + nums[i]);               
+            }
+        }
+        if(dp[sum] == sum)
+            return true;
+        return false;
+    }
+};

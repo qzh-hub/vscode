@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> path;
+
+    void backtrace(vector<int>& nums, int startIndex, vector<int>& visited){
+        if(startIndex == nums.size()){
+            return;
+        }
+        for(int i = startIndex; i < nums.size(); i ++){ 
+            if(i > 0 && nums[i] == nums[i - 1] && visited[i - 1] == 0)
+                continue;
+            if(visited[i] == 0){
+                visited[i] = 1;
+                path.emplace_back(nums[i]);
+                res.emplace_back(path);
+                backtrace(nums, i + 1, visited);
+                path.pop_back();
+                visited[i] = 0;
+            }                              
+        }
+    }
+
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<int> visited(nums.size(), 0);
+        res.emplace_back(path);
+        backtrace(nums, 0, visited);
+        return res;
+    }
+};

@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<string> res;
+
+    void dfs(int n, int left, int right, string path){
+        if(right > left || left > n || right > n)
+            return;
+        if(right == left && left == n){
+            res.emplace_back(path);
+            return;
+        }
+        dfs(n, left + 1, right, path + '(');
+        dfs(n, left, right + 1, path + ')');
+    }
+    vector<string> generateParenthesis(int n) {
+        dfs(n, 0, 0, "");
+        return res;
+    }
+};

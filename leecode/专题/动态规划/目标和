@@ -1,0 +1,22 @@
+class Solution {
+public:
+    // 有 left - right = target。
+    // left + right = sum
+    // left - (sum - left) = target -> left = (target + sum)/2    
+    int findTargetSumWays(vector<int>& nums, int target) {
+        if((target + accumulate(nums.begin(), nums.end(), 0)) % 2 != 0)
+            return 0;
+        int left = (target + accumulate(nums.begin(), nums.end(), 0)) / 2;
+        vector<int> dp(left + 1, 0);
+        dp[0] = 1;
+        for(int i = 0; i < nums.size(); i ++){
+            cout << " i = " << i << " : ";
+            for(int j = left; j >= nums[i]; j --){
+                dp[j] += dp[j - nums[i]];    
+                cout << "dp[" << j << "]" << " : " << dp[j] << " ## ";           
+            }
+            cout << endl;
+        }
+        return dp.back();
+    }
+};

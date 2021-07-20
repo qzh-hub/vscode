@@ -1,0 +1,53 @@
+// 递归交换
+class Solution {
+public:
+    void dfs(int depth, int len, vector<int>& nums, vector<vector<int>>& res){
+        if(depth == len){
+            res.emplace_back(nums);
+            return;
+        }
+        for(int i = depth; i < len; i ++){
+            swap(nums[depth], nums[i]);
+            dfs(depth+1, len, nums, res);
+            swap(nums[depth], nums[i]);
+        }
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        int len = nums.size();
+        if(len == 0)
+            return res;
+        dfs(0, len, nums, res);
+        return res;
+    }
+};
+
+// 深度优先搜索
+class Solution {
+public: 
+    void dfs(int depth, int len, vector<int>& nums,vector<int>& path, vector<vector<int>>& res, vector<int>& visited){
+        if(depth == len){
+            res.emplace_back(path);
+            return;
+        }
+        for(int i = 0; i < len; i ++){
+            if(visited[i])
+                continue;
+            visited[i] = 1;
+            path.emplace_back(nums[i]);
+            dfs(depth+1, len, nums, path, res, visited);
+            path.pop_back();
+            visited[i] = 0;
+        }
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;        
+        int len = nums.size();
+        if(len == 0)
+            return res;
+        vector<int> path;
+        vector<int> visited(len, 0);
+        dfs(0, len, nums, path, res, visited);
+        return res;
+    }
+};

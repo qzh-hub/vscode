@@ -1,0 +1,30 @@
+class Solution {
+public:
+    // 贪心
+    int findLengthOfLCIS(vector<int>& nums) {
+        int res = 1, tmp = 1;       
+        for(int i = 1; i < nums.size(); i ++){
+            if(nums[i] > nums[i - 1])
+                tmp ++;
+            else{
+                res = max(res, tmp);
+                tmp = 1;
+            }
+        }
+        res = max(res, tmp);
+        return res;
+    }
+
+    // 动态规划
+    int findLengthOfLCIS(vector<int>& nums) {
+        int len = nums.size();
+        int res = 1;
+        vector<int> dp(len, 1);      
+        for(int i = 1; i < nums.size(); i ++){
+            if(nums[i] > nums[i - 1])
+                dp[i] = dp[i - 1] + 1;
+            res =  max(res, dp[i]);
+        }
+        return res;
+    }
+};

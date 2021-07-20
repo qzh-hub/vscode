@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> judge;
+        if(s.size() % 2 != 0)
+            return false;
+        for(int i = 0; i < s.size(); i ++){
+            if(s[i] == '(' || s[i] == '{' || s[i] == '[')
+                judge.push(s[i]);
+            else{
+                if(judge.empty())
+                    return false;
+                else{
+                    if((s[i] == ')' && judge.top() == '(') || (s[i] == ']' && judge.top() == '[') || (s[i] == '}' && judge.top() == '{'))
+                        judge.pop();
+                    else
+                        return false;
+                }
+            }           
+        }
+        if(judge.empty())
+            return true;
+        else 
+            return false;
+    }
+};
