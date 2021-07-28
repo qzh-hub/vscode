@@ -1,0 +1,47 @@
+class Solution {
+public:
+    /**
+     * retrun the longest increasing subsequence
+     * @param arr int整型vector the array
+     * @return int整型vector
+     */
+    vector<int> LIS(vector<int>& arr) {
+        // 动态规划
+        /*int len = arr.size();
+        vector<int> dp(len, 1);
+        int maxnum = dp[0];
+        for(int i = 0; i < len - 1; i ++){
+            for(int j = i + 1; j < len; j ++){
+                if(arr[j] > arr[i])
+                    dp[j] = max(dp[j], dp[i] + 1);
+                if(maxnum < dp[j]){
+                    maxnum = dp[j];
+                }
+            }
+        }*/
+        int len = arr.size();
+        // temp[i]表示长为i+1的递增序列中，结尾数字最小那个数字
+        vector<int> temp(1, arr[0]);
+        // mx[i]表示以arr[i]结束的最长递增序列的长度
+        vector<int> mx(1, 1);
+        for(int i = 1; i < len ; i ++){
+            if(arr[i] > temp.back()){
+                temp.emplace_back(arr[i]);
+                mx.emplace_back(temp.size());
+            }else{
+                int pos = lower_bound(temp.begin(), temp.end(), arr[i]) - temp.begin();
+                temp[pos] = arr[i];
+                mx.emplace_back(pos + 1);
+            }
+        }
+        int maxlen = temp.size();
+        vector<int> res(maxlen);
+        int i = len - 1;
+        while(maxlen > 0 && i >= 0){
+            if(mx[i] == maxlen)
+                res[--maxlen] = arr[i];
+            i --;
+        }
+        return res;
+    }
+};
