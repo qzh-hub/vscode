@@ -1,0 +1,59 @@
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        // 动态规划
+        if(s.size() < 2)
+            return 0;
+        int maxval = 0;
+        vector<int> dp(s.size(), 0);
+        if(s[0] == '(' && s[1] == ')'){
+            dp[1] = 2;
+            maxval = 2;
+        }                    
+        for(int i = 2; i < s.size(); i ++){
+            // 以 '(' 结尾长度为0
+            if(s[i] == ')'){     
+                if(s[i - 1] == '(')
+                    dp[i] = dp[i - 2] + 2;
+                else if(i - dp[i - 1] - 1 >= 0 && s[i - dp[i - 1] - 1] == '('){
+                    if(i - dp[i - 1] - 2 >= 0)
+                        dp[i] = dp[i - 1] + 2 + dp[i - dp[i - 1] - 2];
+                    else if(i - dp[i - 1] - 1 >= 0)
+                        dp[i] = dp[i - 1] + 2;                    
+                }
+            }
+            maxval = max(maxval, dp[i]);
+        }
+        return maxval;
+
+        // 两次遍历
+        int lc = 0, rc = 0, maxval = 0;
+        for(int i = 0; i < s.size(); i ++){
+            if(s[i] == '(')
+                lc ++;
+            else    
+                rc ++;            
+            if(lc == rc)
+                maxval = max(maxval, rc * 2);
+            else if(rc > lc){
+                lc = 0; 
+                rc = 0;
+            }
+        }
+        lc = 0;
+        rc = 0;
+        for(int i = s.size() - 1; i >= 0; i --){
+            if(s[i] == ')')
+                rc ++;
+            else    
+                lc ++;
+            if(rc == lc)
+                maxval = max(maxval, lc * 2);
+            else if(lc > rc){
+                lc = 0;
+                rc = 0;
+            }
+        }
+        return maxval;
+    }
+};

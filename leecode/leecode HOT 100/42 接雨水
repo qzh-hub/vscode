@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int left = 0, right = height.size() - 1;
+        int sumbefore = accumulate(height.begin(), height.end(), 0);
+        while(left < right){
+            while(height[left] == 0)
+                left ++;
+            while(height[right] == 0)
+                right --;
+            int leftnum = height[left], rightnum = height[right];
+            int minnum = min(leftnum, rightnum);
+            for(int i = left + 1; i <= right - 1; i ++){
+                if(height[i] < minnum)
+                    height[i] = minnum;
+            }
+            if(leftnum > rightnum){
+                while(height[right] == rightnum && right > left)
+                    right --;
+            }else{
+                while(height[left] == leftnum && left < right)
+                    left ++;
+            }
+        }       
+        return accumulate(height.begin(), height.end(), 0) - sumbefore;
+    }
+};
