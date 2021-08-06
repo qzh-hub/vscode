@@ -1,0 +1,28 @@
+class Solution {
+public:
+    /**
+     * max water
+     * @param arr int整型vector the array
+     * @return long长整型
+     */
+    long long maxWater(vector<int>& arr) {
+        int left = 0, right = arr.size() - 1;
+        long long preSum = 0;
+        for(int n : arr)
+            preSum += n;
+        while(left <= right){
+            int tmp = min(arr[left], arr[right]);
+            for(int i = left + 1; i <= right - 1; i ++){
+                arr[i] = max(arr[i], tmp);
+            }
+            while(arr[left] == tmp)
+                left ++;
+            while(arr[right] == tmp)
+                right --;
+        }
+        long long curSum = 0;
+        for(int n : arr)
+            curSum += n;
+        return curSum - preSum;
+    }
+};

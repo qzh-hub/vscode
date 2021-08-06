@@ -1,0 +1,40 @@
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ * };
+ */
+
+class Solution {
+public:
+    /**
+     * 
+     * @param head ListNode类 
+     * @return ListNode类
+     */
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode* res = new ListNode(0);
+        res->next = head;
+        ListNode* pre = res;
+        int flag = 0;
+        while(head != nullptr){
+            if(head->next != nullptr && head->val == head->next->val){                
+                ListNode* del = head;
+                head = head->next;
+                pre->next = head;
+                flag = 1;
+                delete del;
+                continue;
+            }
+            if(flag){
+                flag = 0;
+                pre->next = head->next;
+                delete head;
+                head = pre;
+            }
+            pre = head;
+            head = head->next;
+        }
+        return res->next;
+    }
+};

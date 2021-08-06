@@ -1,0 +1,29 @@
+class Solution {
+public:
+    /**
+     * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可
+     *
+     * 
+     * @param arr intvector 
+     * @param k int 
+     * @return int
+     */
+    int foundOnceNumber(vector<int>& arr, int k) {
+        int bitNum[32] = {0};
+        for(int i = 0; i < arr.size(); i ++){
+            int bitMask = 1;
+            for(int j = 31; j >= 0; j --){
+                int bit = arr[i] & bitMask;
+                if(bit != 0)
+                    bitNum[j] ++;
+                bitMask = bitMask << 1;
+            }
+        }
+        int res = 0;
+        for(int i = 0; i < 32; i ++){
+            res = res << 1;
+            res += bitNum[i] % k;
+        }
+        return res;
+    }
+};

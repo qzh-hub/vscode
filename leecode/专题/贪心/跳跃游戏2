@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int n = nums.size();
+        if(n < 2)
+            return 0;
+        int curdis = 0, nextdis = 0, res = 0;
+        for(int i = 0; i < n; i ++){              
+            nextdis = max(nextdis, nums[i] + i);
+            if(i == curdis){
+                curdis = nextdis;
+                res ++;
+            }
+            if(curdis >= n - 1)
+                break;
+        }
+        return res;
+    }
+};
