@@ -1,0 +1,49 @@
+/**
+ * struct TreeNode {
+ *	int val;
+ *	struct TreeNode *left;
+ *	struct TreeNode *right;
+ * };
+ */
+
+class Solution {
+public:
+    vector<bool> res;
+    int maxval = INT_MIN;
+    bool isBST(TreeNode* root){
+        if(root == nullptr)
+            return true;
+        int l = isBST(root->left);
+        if(maxval < root->val)
+            maxval = root->val;
+        else
+            return false;
+        int r = isBST(root->right);
+        return l && r;
+    }
+    bool isCBT(TreeNode* root){
+        if(root == nullptr)
+            return true;
+        queue<TreeNode* > q;
+        q.push(root);
+        while(!q.empty()){
+            TreeNode* node = q.front();
+            q.pop();
+            if(node == nullptr)
+                break;
+            q.push(node->left);
+            q.push(node->right);
+        }
+        while(!q.empty()){
+            if(q.front() != nullptr)
+                return false;
+            q.pop();
+        }
+        return true;
+    }
+    vector<bool> judgeIt(TreeNode* root) {
+        res.emplace_back(isBST(root));
+        res.emplace_back(isCBT(root));
+        return res;
+    }
+};

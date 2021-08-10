@@ -1,0 +1,45 @@
+/**
+ * struct TreeNode {
+ *	int val;
+ *	struct TreeNode *left;
+ *	struct TreeNode *right;
+ * };
+ */
+
+class Solution {
+public:
+    vector<int> res;
+    vector<int> path;
+    void backtrace(TreeNode* root){
+        if(root->left == nullptr && root->right == nullptr){
+            path.emplace_back(root->val);
+            int n = path.size() - 1;
+            int tmp = 0;
+            for(int i = n; i >= 0; i --){
+                tmp += path[i] * pow(10, n - i);
+            }
+            res.emplace_back(tmp);
+            path.pop_back();
+            return;
+        }
+        if(root->left){
+            path.emplace_back(root->val);
+            backtrace(root->left);
+            path.pop_back();
+        }
+        if(root->right){
+            path.emplace_back(root->val);
+            backtrace(root->right);
+            path.pop_back();
+        }
+    }
+    int sumNumbers(TreeNode* root) {
+        if(root == nullptr)
+            return 0;
+        backtrace(root);
+        int result = 0;
+        for(int n : res)
+            result += n;
+        return result;
+    }
+};

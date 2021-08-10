@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> path;
+    void backtrace(vector<int> &S, int startIndex){
+        res.emplace_back(path);
+        if(startIndex == S.size())
+            return;
+        for(int i = startIndex; i < S.size(); i ++){
+            path.emplace_back(S[i]);
+            backtrace(S, i + 1);
+            path.pop_back();
+        }
+    
+    }
+    vector<vector<int> > subsets(vector<int> &S) {
+        backtrace(S, 0);
+        sort(res.begin(), res.end(), [&](vector<int> a, vector<int> b){return a.size() < b.size();});
+        return res;
+    }
+};

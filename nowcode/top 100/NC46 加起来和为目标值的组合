@@ -1,0 +1,36 @@
+class Solution {
+public:
+//     vector<vector<int>> res;
+//     vector<int> path;
+    void backtrace(vector<int> &num, int target, int curSum, int startIndex, vector<int> &used, vector<vector<int>>& res, vector<int> &path){
+        if(target == curSum){
+            res.emplace_back(path);
+            return;
+        }
+        if(startIndex == num.size())
+            return;
+        for(int i = startIndex; i < num.size(); i ++){
+            if(curSum + num[i] > target)
+                return;
+            if(i > 0 && used[i - 1] == 0 && num[i] == num[i - 1])
+                continue;
+            if(used[i] == 0){
+                used[i] = 1;
+                path.emplace_back(num[i]);
+                curSum += num[i];
+                backtrace(num, target, curSum, i + 1, used, res, path);
+                curSum -= num[i];
+                path.pop_back();
+                used[i] = 0;
+            }
+        }
+    }
+    vector<vector<int> > combinationSum2(vector<int> &num, int target) {
+        vector<vector<int>> res;
+        vector<int> path;
+        vector<int> used(num.size(), 0);
+        sort(num.begin(), num.end());
+        backtrace(num, target, 0, 0, used, res, path);
+        return res;
+    }
+};

@@ -1,0 +1,41 @@
+/*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    vector<vector<int> > Print(TreeNode* pRoot) {
+        vector<vector<int>> res;
+        if(pRoot == nullptr)
+            return res;
+        queue<TreeNode* > q;
+        int depth = 0;
+        q.push(pRoot);
+        while(!q.empty()){
+            int size = q.size();
+            vector<int> levelpath;
+            while(size > 0){
+                TreeNode* node = q.front();
+                q.pop();
+                levelpath.emplace_back(node->val);
+                if(node->left)
+                    q.push(node->left);
+                if(node->right)
+                    q.push(node->right);
+                size --;
+            }
+            if(depth % 2 == 1)
+                reverse(levelpath.begin(), levelpath.end());
+            depth ++;
+            res.emplace_back(levelpath);
+        }
+        return res;
+    }
+    
+};

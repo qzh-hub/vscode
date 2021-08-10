@@ -12,3 +12,20 @@
                         判断flag是否为1，若为1，pre->next = head->next，delete head，head = pre，
                         最后 pre = head，head = head->next，这样写可以统一对指针的更新）
 数组中只出现一次的数（将数组所有数的二进制表示的每一位相加再对3取模）
+括号生成（注意终止条件，以及回溯过程，path += '('，path += ')'）
+集合的所有子集（对结果按照升序和数组大小进行排序
+              sort(res.begin(), res.end(), [&](vector<int> a, vector<int> b){return a.size() < b.size();});）
+加起来和为目标值的组合（牛客上需要将 res 和 path 作为函数的变量，声明为全局会超时）
+
+回溯（理清什么时候用 used 去重，回溯的遍历中 i 的取值）
+二叉树和为指定值的路径（牛客上ac不过但是leecode上可以）
+按之字形顺序打印二叉树（利用depth记录深度，depth % 2 == 1 时，reverse(path) 即可）
+平衡二叉树（求深度时，如果 l 或 r = -1，则 return -1，相当于退出，不再继续往下求深度）
+判断二叉树是否对称（递归，定义compare(root->left, root->right),定义outside，即树的最左和最右边的节点值是否相等，
+                  inside，判断内侧节点值是否相等
+                  迭代，假设第三层有四个节点 1，2，3，4，按照1，4，2，3的顺序入队，每次同时从队列中
+                  取出两个节点进行比较）
+判断是否是二叉搜索树和完全二叉树（二叉搜索树：中序遍历，定义一个全局变量maxval记录左子树的最大值，与root->val比较
+                              完全二叉树：使用层次遍历，node = q.front()，如果 node == nullptr 时 break
+                              ，因为此时队列可能不为空（可能还有其他空节点），判断队列中剩下的节点是否都为空）
+合并二叉树（见leecode）

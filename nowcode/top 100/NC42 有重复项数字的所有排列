@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> path;
+    void backtrace(vector<int> &num, vector<int> &used, int start){
+        if(path.size() == num.size()){
+            res.emplace_back(path);
+            return;
+        }
+        for(int i = 0; i < num.size(); i ++){
+            if(i > 0 && num[i] == num[i - 1] && used[i - 1] == 0)
+                continue;
+            if(used[i] == 0){
+                used[i] = 1;
+                path.emplace_back(num[i]);
+                backtrace(num, used, i + 1);
+                path.pop_back();
+                used[i] = 0;
+            }
+        }
+    }
+    vector<vector<int> > permuteUnique(vector<int> &num) {
+        vector<int> used(num.size(), 0);
+        sort(num.begin(), num.end());
+        backtrace(num, used, 0);
+        return res;
+    }
+};

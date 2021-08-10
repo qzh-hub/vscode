@@ -1,0 +1,53 @@
+/**
+ * struct TreeNode {
+ *	int val;
+ *	struct TreeNode *left;
+ *	struct TreeNode *right;
+ * };
+ */
+
+class Solution {
+public:
+    // 递归
+    bool compare(TreeNode* leftnode, TreeNode* rightnode){
+        if(!leftnode && !rightnode)
+            return true;
+        if(!leftnode || !rightnode || leftnode->val != rightnode->val)
+            return false;
+        int outside = compare(leftnode->left, rightnode->right);
+        int inside = compare(leftnode->right, rightnode->left);
+        if(outside && inside)
+            return true;
+        return false;    
+    }
+    bool isSymmetric(TreeNode* root) {
+        if(root == nullptr)
+            return true;
+        return compare(root->left, root->right);
+    }
+
+    
+    // 迭代
+    bool isSymmetric(TreeNode* root) {
+        if(root == nullptr)
+            return true;
+        queue<TreeNode* > q;
+        q.push(root->left);
+        q.push(root->right);
+        while(!q.empty()){
+            TreeNode* leftnode = q.front();
+            q.pop();
+            TreeNode* rightnode = q.front();
+            q.pop();
+            if(!leftnode && !rightnode)
+                continue;
+            if(!leftnode || !rightnode || leftnode->val != rightnode->val)
+                return false;
+            q.push(leftnode->left);
+            q.push(rightnode->right);
+            q.push(leftnode->right);
+            q.push(rightnode->left);
+        }
+        return true;
+    }
+};
