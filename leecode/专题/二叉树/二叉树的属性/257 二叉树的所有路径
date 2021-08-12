@@ -11,6 +11,7 @@
  */
 class Solution {
 public:
+    // 回溯
     vector<string> res;
     string spath;
     vector<int> path;
@@ -37,6 +38,57 @@ public:
     }
     vector<string> binaryTreePaths(TreeNode* root) {
         backtrace(root, path, spath);
+        return res;
+    }
+
+    // dfs
+    vector<string> res;
+    void dfs(TreeNode* root, string path){
+        if(root == nullptr)
+            return;
+        path += to_string(root->val);
+        if(!root->left && !root->right){           
+            res.emplace_back(path);
+            return;
+        }else{
+            dfs(root->left, path + "->");
+            dfs(root->right, path + "->");
+        }
+        
+    }
+    vector<string> binaryTreePaths(TreeNode* root) {
+        string path;
+        dfs(root, path);
+        return res;
+    }
+
+    // 迭代
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> res;
+        if(root == nullptr)
+            return res;       
+        vector<int> path;
+        stack<TreeNode*> s;
+        s.push(root);
+        while(!s.empty()){
+            TreeNode* node = s.top();
+            s.pop();
+            path.emplace_back(node->val);
+            if(!node->left && !node->right){
+                string spath;
+                 for(int i = 0; i < path.size() - 1; i ++){
+                    spath += to_string(path[i]);
+                    spath += "->";
+                }
+                spath += to_string(path[path.size() - 1]);
+                res.emplace_back(spath);
+                path.pop_back();
+            }
+            if(node->right)
+                s.push(node->right);
+            if(node->left)
+                s.push(node->left);
+        }
         return res;
     }
 };

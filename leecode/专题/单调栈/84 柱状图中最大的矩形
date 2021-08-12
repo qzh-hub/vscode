@@ -1,0 +1,54 @@
+class Solution {
+public:
+    // 动态规划
+    // minLeftIndex : 第i个柱子左边第一个高度小于该柱子的下标
+    int largestRectangleArea(vector<int>& heights) {
+        int n = heights.size();
+        vector<int> minLeftIndex(n, 0);
+        vector<int> minRightIndex(n, 0);
+        minLeftIndex[0] = -1;
+        minRightIndex[n - 1] = n;
+        for(int i = 1; i < n; i ++){
+            int t = i - 1;
+            while(t >= 0 && heights[t] >= heights[i])
+                t = minLeftIndex[t];
+            minLeftIndex[i] = t;                          
+        }
+        for(int i = n - 2; i >= 0; i --){
+            int t = i + 1;
+            while(t < n && heights[t] >= heights[i])
+                t = minRightIndex[t];
+            minRightIndex[i] = t;                          
+        }
+        int res = 0;
+        for(int i = 0; i < n; i ++){
+            int curArea = (minRightIndex[i] - minLeftIndex[i] - 1) * heights[i];
+            res = max(res, curArea);
+        }
+        return res;
+    }
+
+
+    // 单调栈
+    int largestRectangleArea(vector<int>& heights) {      
+        heights.insert(heights.begin(), 0);
+        heights.emplace_back(0);
+        int n = heights.size();
+        stack<int> s;
+        s.push(0);
+        int res = 0;
+        for(int i = 1; i < n; i ++){
+            if(heights[i] >= heights[s.top()])
+                s.push(i);
+            else{
+                while(heights[i] < heights[s.top()]){
+                    int cur = s.top();
+                    s.pop();
+                    res = max(res, heights[cur] * (i - s.top() - 1));
+                }               
+                s.push(i);
+            }
+        }
+        return res;    
+    }
+};
