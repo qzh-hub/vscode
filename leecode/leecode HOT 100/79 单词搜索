@@ -1,0 +1,44 @@
+class Solution {
+public:
+    string path;
+    int flag = 0;
+    bool backtarce(vector<vector<char>>& board, vector<vector<int>>& used, int row, int col, int wordIndex, string word){
+        if(board[row][col] != word[wordIndex])
+            return false;
+        else if(wordIndex == word.size() - 1)
+            return true;
+        used[row][col] = 1;
+        int res = 0;
+        int dx[4] = {-1, 1, 0, 0};
+        int dy[4] = {0, 0, -1, 1};
+        for(int i = 0; i < 4; i ++){
+            row += dx[i];
+            col += dy[i];
+            if(row >= 0 && row < board.size() && col >= 0 && col < board[0].size()){
+                if(used[row][col] == 0){
+                    int flag = backtarce(board, used, row, col, wordIndex + 1, word);
+                    if(flag){
+                        res = 1;
+                        break;
+                    }
+                }
+            }   
+            row -= dx[i];
+            col -= dy[i];        
+        }
+        used[row][col] = 0;
+        return res;
+    }
+    bool exist(vector<vector<char>>& board, string word) {
+        int n = board.size(), m = board[0].size();
+        vector<vector<int>> used(n, vector<int>(m, 0));
+        for(int i = 0; i < n; i ++){
+            for(int j = 0; j < m; j ++){
+                int flag = backtarce(board, used, i, j, 0, word);
+                if(flag)
+                    return true;
+            }
+        }    
+        return false;
+    }
+};

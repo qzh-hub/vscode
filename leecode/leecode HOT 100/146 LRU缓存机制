@@ -1,0 +1,68 @@
+class LRUCache {
+public:
+    struct bilist{
+        int val;
+        int key;
+        bilist* pre;
+        bilist* next;
+        bilist(int _key, int _val) : key(_key), val(_val), pre(nullptr), next(nullptr) {}
+    };
+
+    int n;
+    unordered_map<int, bilist*> m;
+    bilist* L = new bilist(-1, -1);
+    bilist* R = new bilist(-1, -1);
+
+    LRUCache(int capacity) {
+        n = capacity;
+        L->next = R;
+        R->pre = L;
+    }
+
+    void remove(bilist* node){
+        node->next->pre = node->pre;
+        node->pre->next = node->next;        
+    }
+
+    void insert(bilist* node){        
+        node->next = L->next;
+        node->pre = L;
+        L->next = node;
+        node->next->pre = node;
+    }
+
+    int get(int key) {
+        if(m.count(key) == 0)
+            return -1;
+        bilist* p = m[key];
+        remove(p);
+        insert(p);
+        return p->val;
+    }
+    
+    void put(int key, int value) {
+        if(m.count(key)){
+            bilist* node = m[key];
+            node->val = value;
+            remove(node);
+            insert(node);           
+        }
+        else{
+            if(n == m.size()){
+                bilist* del = R->pre;
+                remove(del);
+                m.erase(del->key);               
+                delete del;
+            }           
+            bilist* node = new bilist(key, value);
+            m[key] = node;
+            insert(node);            
+        }
+    }   
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
